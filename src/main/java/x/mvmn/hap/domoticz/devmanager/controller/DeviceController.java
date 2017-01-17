@@ -32,16 +32,6 @@ public class DeviceController {
 		return domoticzDevicesService.listDevices();
 	}
 
-	@RequestMapping(path = "/hap/initandstart")
-	public void startBridge() {
-		for (DeviceDescriptor device : deviceDescriptorRepository.findAll()) {
-			if (device.getDomoticzType().equals("Light/Switch")) {
-				homekitService.getHomekitBridge().addAccessory(new HomekitSwitch(device, domoticzDevicesService));
-			}
-		}
-		homekitService.getHomekitBridge().start();
-	}
-
 	@RequestMapping(path = "/domoticz/fetch")
 	public List<DeviceDescriptor> fetchFromDomotics() {
 		List<Map<String, Object>> domoticzDevices = domoticzDevicesService.listDevices();
@@ -64,7 +54,7 @@ public class DeviceController {
 				device.setDomoticzType(domoticzType);
 				device = deviceDescriptorRepository.save(device);
 				if (device.getDomoticzType().equals("Light/Switch")) {
-					homekitService.getHomekitBridge().addAccessory(new HomekitSwitch(device, domoticzDevicesService));
+					homekitService.addAccessory(new HomekitSwitch(device, domoticzDevicesService));
 				}
 			}
 			result.add(device);
