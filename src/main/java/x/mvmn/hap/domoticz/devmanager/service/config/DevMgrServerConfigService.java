@@ -20,6 +20,7 @@ public class DevMgrServerConfigService {
 	protected byte[] key;
 	protected BigInteger salt;
 	protected String mac;
+	protected String label;
 
 	public DevMgrServerConfigService() {
 		try {
@@ -29,6 +30,7 @@ public class DevMgrServerConfigService {
 			File mainConfig = new File(appHomeFolder, "confg.properties");
 			Properties mainProps = new Properties();
 			if (!mainConfig.exists()) {
+				mainProps.put("label", "mvmn_hap_domoticz_bridge");
 				mainProps.put("key", gson.toJson(HomekitServer.generateKey()));
 				mainProps.put("salt", gson.toJson(HomekitServer.generateSalt().toByteArray()));
 				mainProps.put("mac", HomekitServer.generateMac());
@@ -52,6 +54,7 @@ public class DevMgrServerConfigService {
 		this.pinCode = props.getProperty("pin");
 		this.salt = new BigInteger(gson.fromJson(props.getProperty("salt"), byte[].class));
 		this.key = gson.fromJson(props.getProperty("key"), byte[].class);
+		this.label = props.getProperty("label", "mvmn_hap_domoticz_bridge");
 	}
 
 	public String getPinCode() {
@@ -68,5 +71,9 @@ public class DevMgrServerConfigService {
 
 	public String getMac() {
 		return mac;
+	}
+
+	public String getLabel() {
+		return label;
 	}
 }

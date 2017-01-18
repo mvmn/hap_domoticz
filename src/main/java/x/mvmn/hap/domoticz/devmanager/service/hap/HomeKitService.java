@@ -11,6 +11,7 @@ import com.beowulfe.hap.HomekitServer;
 
 import x.mvmn.hap.domoticz.devmanager.model.DeviceDescriptor;
 import x.mvmn.hap.domoticz.devmanager.model.homekit.HomekitSwitch;
+import x.mvmn.hap.domoticz.devmanager.service.config.DevMgrServerConfigService;
 import x.mvmn.hap.domoticz.devmanager.service.domoticz.DomoticzDevicesService;
 import x.mvmn.hap.domoticz.devmanager.service.persistence.DeviceDescriptorRepository;
 
@@ -19,6 +20,9 @@ public class HomeKitService {
 
 	@Autowired
 	protected HomekitAuthService auth;
+
+	@Autowired
+	protected DevMgrServerConfigService config;
 
 	@Autowired
 	protected DomoticzDevicesService domoticzDevicesService;
@@ -33,7 +37,7 @@ public class HomeKitService {
 		try {
 			// FIXME: hardcode, no lifecycle management etc
 			HomekitServer homekitServer = new HomekitServer(9123);
-			homekitBridge = homekitServer.createBridge(auth, "Mock", "MMakhin", "Alpha0.1", "223322223322");
+			homekitBridge = homekitServer.createBridge(auth, config.getLabel(), "MMakhin", "Alpha0.1", "223322223322");
 			// homekitBridge.start();
 			for (DeviceDescriptor device : deviceDescriptorRepository.findAll()) {
 				if (device.getDomoticzType().equals("Light/Switch")) {
