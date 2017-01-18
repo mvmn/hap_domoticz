@@ -53,7 +53,8 @@ public class DeviceController {
 				device.setDomoticzIdx(domoticzIdx);
 				device.setDomoticzType(domoticzType);
 				device = deviceDescriptorRepository.save(device);
-				if (device.getDomoticzType().equals("Light/Switch")) {
+				if (device.getDomoticzType().equals("Light/Switch") || device.getDomoticzType().equals("Lighting")
+						|| device.getDomoticzType().equals("Lighting 2")) {
 					homekitService.addAccessory(new HomekitSwitch(device, domoticzDevicesService));
 				}
 			}
